@@ -13,10 +13,16 @@ class MemeViewController: UIViewController {
     
     @IBOutlet weak var memeImage: UIImageView!
     //var captions = [UITextField]()
-    var meme: Meme!
+    //var meme = Meme(id: <#T##String#>, name: "default", url: <#T##String#>, width: <#T##Int#>, height: <#T##Int#>, box_count: <#T##Int#>)
+    var meme: Meme?
+    var customImage: Image?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let meme = self.meme else {
+            memeImage.image = customImage
+            return
+        }
         guard let url = URL(string: meme.url) else { return }
         memeImage.af_setImage(withURL: url)
         // Do any additional setup after loading the view.
@@ -39,7 +45,59 @@ class MemeViewController: UIViewController {
         view.addSubview(caption)
     }
     
+    func showAlertWith(title: String, message: String){
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
+    
     @IBAction func didForge(_ sender: UIButton) {
+        guard let saveMeme = memeImage.image else {return}
+        UIImageWriteToSavedPhotosAlbum(saveMeme, self, nil, nil)
+    }
+    
+//    func generateImageWithText(text: String) -> UIImage? {
+//        let image = UIImage(named: "imageWithoutText")!
+//
+//        let imageView = UIImageView(image: image)
+//        imageView.backgroundColor = UIColor.clear
+//        imageView.frame = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+//
+//        let label = UILabel(frame: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+//        label.backgroundColor = UIColor.clear
+//        label.textAlignment = .center
+//        label.textColor = UIColor.white
+//        label.text = text
+//
+//        UIGraphicsBeginImageContextWithOptions(label.bounds.size, false, 0)
+//        imageView.layer.render(in: UIGraphicsGetCurrentContext()!)
+//        label.layer.render(in: UIGraphicsGetCurrentContext()!)
+//        let imageWithText = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//
+//        return imageWithText
+//    }
+    
+    func textToImage(drawText text: String, inImage image: UIImage, atPoint point: CGPoint) -> UIImage {
+        let textColor = UIColor.white
+        let textFont = UIFont(name: "Helvetica Bold", size: 12)!
+
+        let scale = UIScreen.main.scale
+        UIGraphicsBeginImageContextWithOptions(image.size, false, scale)
+
+        let textFontAttributes = [
+            NSAttributedString.Key.font: textFont,
+            NSAttributedString.Key.foregroundColor: textColor,
+            ] as [NSAttributedString.Key : Any]
+        image.draw(in: CGRect(origin: CGPoint.zero, size: image.size))
+
+        let rect = CGRect(origin: point, size: image.size)
+        text.draw(in: rect, withAttributes: textFontAttributes)
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage!
     }
     
     /*

@@ -24,4 +24,13 @@ struct Meme: Codable {
     public let width: Int
     public let height: Int
     public let box_count: Int
+    
+    init(id: String, name: String, url: String, width: Int, height: Int, box_count: Int) {
+        self.id = id
+        self.name = name
+        self.url = url
+        self.width = width
+        self.height = height
+        self.box_count = box_count
+    }
 }

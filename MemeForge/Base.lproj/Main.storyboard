@@ -143,7 +143,6 @@
         <!--Custom Template View Controller-->
         <scene sceneID="ig4-p5-TPO">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="l1R-dQ-2BJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="dPj-ka-Btj" customClass="CustomTemplateViewController" customModule="MemeForge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ayu-hG-1Rh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -184,8 +183,10 @@
                     <navigationItem key="navigationItem" id="rQR-HW-I5T"/>
                     <connections>
                         <outlet property="templateImage" destination="hSJ-fB-D9g" id="Rkp-Rh-VBq"/>
+                        <segue destination="z4x-SU-R8P" kind="show" identifier="customToMeme" id="vay-9S-bIo"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l1R-dQ-2BJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="976.81159420289862" y="-824.33035714285711"/>
         </scene>
@@ -230,4 +231,7 @@
     <resources>
         <image name="royalFrame" width="840" height="836"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="vay-9S-bIo"/>
+    </inferredMetricsTieBreakers>
 </document>

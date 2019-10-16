@@ -7,23 +7,54 @@
 //
 
 import UIKit
+import AlamofireImage
 
-class CustomTemplateViewController: UIViewController {
+class CustomTemplateViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var templateImage: UIImageView!
+    
+    let pickerViewController = UIImagePickerController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        pickerViewController.delegate = self
+        pickerViewController.allowsEditing = true
+        
         // Do any additional setup after loading the view.
     }
     
     @IBAction func didPickFromPhotoLib(_ sender: UIButton) {
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            pickerViewController.sourceType = .photoLibrary
+            present(pickerViewController, animated: true, completion: nil)
+        }
+        print("Can't access photo library")
     }
     
     @IBAction func didTakePhoto(_ sender: UIButton) {
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            pickerViewController.sourceType = .camera
+            present(pickerViewController, animated: true, completion: nil)
+        }
+        print("Can't access camera")
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[.editedImage] as! UIImage
+        
+        //let scaledImage = image.af_imageAspectScaled(toFill: size)
+        
+        templateImage.image = image
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func didContinue(_ sender: UIButton) {
+        if (templateImage.image != nil) {
+            performSegue(withIdentifier: "customToMeme", sender: self)
+        } else {
+            //alert
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -33,5 +64,7 @@ class CustomTemplateViewController: UIViewController {
 //        let memeViewController = segue.destination as! MemeViewController
 //        memeViewController.meme = meme
 //        memeTableView.deselectRow(at: indexPath, animated: true)
+        let memeViewController = segue.destination as! MemeViewController
+        memeViewController.customImage = templateImage.image
     }
 }
