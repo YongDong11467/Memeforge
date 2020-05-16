@@ -12,13 +12,16 @@ import AlamofireImage
 class MemeViewController: UIViewController {
     
     @IBOutlet weak var memeImage: UIImageView!
-    //var captions = [UITextField]()
-    //var meme = Meme(id: <#T##String#>, name: "default", url: <#T##String#>, width: <#T##Int#>, height: <#T##Int#>, box_count: <#T##Int#>)
+    
     var meme: Meme?
     var customImage: Image?
+    var captions: [Caption] = []
+    var textfields: [UITextField] = []
+    var totalCaptions = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
         guard let meme = self.meme else {
             memeImage.image = customImage
             return
@@ -28,21 +31,44 @@ class MemeViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    func setup() {
+        hideKeyboardWhenTappedAround()
+        memeImage.layer.borderWidth = 10
+        memeImage.layer.cornerRadius = 5
+        memeImage.layer.borderColor = #colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1)
+        memeImage.layer.masksToBounds = true
+    }
+    
     @objc func textFieldDrag(pan: UIPanGestureRecognizer) {
         let loc = pan.location(in: self.view)
         pan.view?.center = loc
     }
     
     @IBAction func didAddCaption(_ sender: UIButton) {
+        //if (totalCaptions >= box_count
         let center = memeImage.center
-        let caption: UITextField = UITextField(frame: CGRect(x: center.x / 2, y: center.y / 2, width: 175.00, height: 50.00));
-        caption.backgroundColor = UIColor.black
-        caption.borderStyle = .roundedRect
-        caption.textColor = UIColor.white
+        let textfield: UITextField = UITextField(frame: CGRect(x: center.x / 2, y: center.y / 2, width: 175.00, height: 50.00));
+        textfield.backgroundColor = UIColor.black
+        textfield.borderStyle = .roundedRect
+        textfield.textColor = UIColor.white
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(textFieldDrag(pan:)))
-        caption.addGestureRecognizer(gesture)
+        textfield.addGestureRecognizer(gesture)
         //memeImage.addSubview(caption)
-        view.addSubview(caption)
+        view.addSubview(textfield)
+        self.textfields.append(textfield)
+        totalCaptions += 1
+    }
+    
+    func populateCaptions() {
+        for textfield in self.textfields {
+            let x = textfield.frame.origin.x
+            let y = textfield.frame.origin.y
+//            let x = textfield.frame.midX
+//            let y = textfield.frame.midY
+            let caption = Caption(id: self.totalCaptions, message: textfield.text!, locationX: Double(x), locationY: Double(y))
+            self.captions.append(caption)
+        }
+        print(self.captions)
     }
     
     func showAlertWith(title: String, message: String){
@@ -53,7 +79,14 @@ class MemeViewController: UIViewController {
     
     @IBAction func didForge(_ sender: UIButton) {
         guard let saveMeme = memeImage.image else {return}
-        UIImageWriteToSavedPhotosAlbum(saveMeme, self, nil, nil)
+        var imageWithText = UIImage()
+        populateCaptions()
+//        for caption in self.captions {
+//            let point = CGPoint(x: caption.locationX, y: caption.locationY)
+//            imageWithText = textToImage(drawText: caption.message, inImage: saveMeme, atPoint: point)
+//        }
+        imageWithText = textToImage(drawCaptions: self.captions, inImage: saveMeme)
+        UIImageWriteToSavedPhotosAlbum(imageWithText, self, nil, nil)
     }
     
 //    func generateImageWithText(text: String) -> UIImage? {
@@ -80,7 +113,7 @@ class MemeViewController: UIViewController {
     
     func textToImage(drawText text: String, inImage image: UIImage, atPoint point: CGPoint) -> UIImage {
         let textColor = UIColor.white
-        let textFont = UIFont(name: "Helvetica Bold", size: 12)!
+        let textFont = UIFont(name: "Helvetica Bold", size: 20)!
 
         let scale = UIScreen.main.scale
         UIGraphicsBeginImageContextWithOptions(image.size, false, scale)
@@ -98,6 +131,41 @@ class MemeViewController: UIViewController {
         UIGraphicsEndImageContext()
 
         return newImage!
+    }
+    
+    func textToImage(drawCaptions captions: [Caption], inImage image: UIImage) -> UIImage {
+        let textColor = UIColor.white
+        let textFont = UIFont(name: "Helvetica Bold", size: 20)!
+        
+        let scale = UIScreen.main.scale
+        UIGraphicsBeginImageContextWithOptions(image.size, false, scale)
+        
+        let textFontAttributes = [
+            NSAttributedString.Key.font: textFont,
+            NSAttributedString.Key.foregroundColor: textColor,
+            ] as [NSAttributedString.Key : Any]
+        image.draw(in: CGRect(origin: CGPoint.zero, size: image.size))
+        
+        for caption in captions {
+            let point = CGPoint(x: caption.locationX, y: caption.locationY)
+            let rect = CGRect(origin: point, size: image.size)
+            caption.message.draw(in: rect, withAttributes: textFontAttributes)
+        }
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+    
+    func hideKeyboardWhenTappedAround() {
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
     
     /*

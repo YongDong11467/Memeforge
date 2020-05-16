@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		189DEC9E2356A2F6003AEA8D /* Caption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189DEC9D2356A2F6003AEA8D /* Caption.swift */; };
 		18A8CD7A233BA4C70054DF79 /* MemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A8CD79233BA4C70054DF79 /* MemeViewController.swift */; };
 		18D570D4233D630B000E2AE4 /* CustomTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D570D3233D630A000E2AE4 /* CustomTemplateViewController.swift */; };
 		18E384D8233AC4AD00E1C8F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E384D7233AC4AD00E1C8F7 /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		189DEC9D2356A2F6003AEA8D /* Caption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Caption.swift; sourceTree = "<group>"; };
 		18A8CD79233BA4C70054DF79 /* MemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeViewController.swift; sourceTree = "<group>"; };
 		18D570D3233D630A000E2AE4 /* CustomTemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTemplateViewController.swift; sourceTree = "<group>"; };
 		18E384D4233AC4AD00E1C8F7 /* MemeForge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemeForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +103,7 @@
 			children = (
 				18E384E9233AC4FB00E1C8F7 /* Meme.swift */,
 				18E384F0233ADC9100E1C8F7 /* MemeCell.swift */,
+				189DEC9D2356A2F6003AEA8D /* Caption.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				18E384DA233AC4AD00E1C8F7 /* MemeTableViewController.swift in Sources */,
 				18A8CD7A233BA4C70054DF79 /* MemeViewController.swift in Sources */,
 				18E384D8233AC4AD00E1C8F7 /* AppDelegate.swift in Sources */,
+				189DEC9E2356A2F6003AEA8D /* Caption.swift in Sources */,
 				18D570D4233D630B000E2AE4 /* CustomTemplateViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
